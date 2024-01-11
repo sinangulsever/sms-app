@@ -30,6 +30,20 @@ bu komut kuyruktaki smsleri gönderir.
 ### Swagger Dökümantasyonu
 <pre>/api/documentation</pre>
 
+### Endpoint  Örnek Kullanım Filtreleri
+
+<pre>
+    /api/sms?id[eq]=1
+    /api/sms?id[gte]=10
+    /api/sms?id[lte]=10
+    /api/sms?sendDate[eq]=01-01-2024
+    /api/sms?sendDate[gte]=01-01-2024
+    /api/sms?sendDate[btw]=01-01-2024x11-12-2024
+    /api/sms?sendDate[btw]=01-01-2024x11-12-2024&status[eq]=1
+    /api/sms?sendDate[eq]=01-01-2024&status[eq]=0
+
+</pre>
+
 
 ### Docker İle Kurulumu
 <pre>git clone https://github.com/sinangulsever/sms-app.git</pre>
