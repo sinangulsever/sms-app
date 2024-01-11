@@ -39,8 +39,8 @@ bu komut kuyruktaki smsleri gönderir.
     /api/v1/sms?sendDate[eq]=01-01-2024
     /api/v1/sms?sendDate[gte]=01-01-2024
     /api/v1/sms?sendDate[btw]=01-01-2024x11-12-2024
-    /api/v1/sms?sendDate[btw]=01-01-2024x11-12-2024&status[eq]=1
-    /api/v1/sms?sendDate[eq]=01-01-2024&status[eq]=0
+    /api/v1/sms?sendDate[btw]=01-01-2024x11-12-2024&statusCode[eq]=1
+    /api/v1/sms?sendDate[eq]=01-01-2024&statusCode[eq]=0
 
 </pre>
 
