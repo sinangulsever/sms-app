@@ -12,6 +12,12 @@
 <pre>php artisan db:seed</pre>
 <pre>php artisan serve</pre>
 
+### Test User
+<pre>
+    email:sinan@gmail.com
+    password:1233
+</pre>
+
 ### Kullanım
 
 <pre>/sms gönder endpointde gelen smsler db ye eklendikten sonra gönderim saatine 3 dk kala kuyruğa eklenip kuyrukta gönderme işlemi sağlanıyor.
