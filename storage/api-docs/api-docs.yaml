@@ -1,0 +1,333 @@
+openapi: 3.0.0
+info:
+  title: 'Sms Api Documentation'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost/api/v1'
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: 'Login User get token'
+      operationId: 99d66635c4992aeaa6aa44ff653d0563
+      parameters:
+        -
+          name: email
+          in: query
+          description: "User's email"
+          required: true
+          schema:
+            type: string
+          example: sinangulsever@gmail.com
+        -
+          name: password
+          in: query
+          description: "User's password"
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Login success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResource'
+        422:
+          description: 'Validation errors'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        500:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: 'Register User'
+      operationId: 08136088c4862c313b35d6518bab8d3a
+      parameters:
+        -
+          name: name
+          in: query
+          description: "User's name"
+          required: true
+          schema:
+            type: string
+        -
+          name: customer_id
+          in: query
+          description: "User's customer id"
+          required: true
+          schema:
+            type: integer
+        -
+          name: email
+          in: query
+          description: "User's email"
+          required: true
+          schema:
+            type: string
+        -
+          name: password
+          in: query
+          description: "User's password"
+          required: true
+          schema:
+            type: string
+        -
+          name: password_confirmation
+          in: query
+          description: "User's password confirmation"
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Register success'
+        422:
+          description: 'Validation errors'
+        500:
+          description: 'Server error'
+  /auth/user:
+    get:
+      tags:
+        - Auth
+      summary: 'Get User'
+      operationId: 32d03117b496ae02c2543b61438d24ad
+      responses:
+        200:
+          description: 'Get user success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        500:
+          description: 'Server error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorized'
+      security:
+        -
+          bearerAuth: []
+  /sms:
+    get:
+      tags:
+        - Sms
+      summary: 'Sms List'
+      description: 'Sms List'
+      operationId: 22889aa1300dc7911c4659c87d3fbe8b
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmsResource'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnAuthorized'
+      security:
+        -
+          bearerAuth: []
+components:
+  schemas:
+    SmsFilter:
+      title: SmsFilter
+      properties:
+        id:
+          description: Id
+          type: integer
+        createDate:
+          description: 'Create Date'
+          type: string
+          format: date-time
+        sendDate:
+          description: 'Send Date'
+          type: string
+          format: date-time
+        status:
+          description: Status
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+      type: object
+    UnAuthorized:
+      title: UnAuthorized
+      properties:
+        message:
+          description: 'UnAuthorized Message'
+          type: string
+      type: object
+    ApiResponse:
+      title: ApiResponse
+      properties:
+        status:
+          description: Status
+          type: boolean
+        message:
+          description: Message
+          type: string
+        data:
+          description: Data
+          type: object
+      type: object
+    CustomerResource:
+      title: CustomerResource
+      properties:
+        id:
+          description: 'Customer Id'
+          type: integer
+        identity:
+          description: 'Customer Identity'
+          type: string
+        name:
+          description: 'Customer Name'
+          type: string
+        email:
+          description: 'Customer Email'
+          type: string
+        phone:
+          description: 'Customer Phone'
+          type: string
+        tax_no:
+          description: 'Customer Tax No'
+          type: string
+        tax_office:
+          description: 'Customer Tax Office'
+          type: string
+        address:
+          description: 'Customer Address'
+          type: string
+      type: object
+    LoginResource:
+      title: LoginResource
+      properties:
+        token:
+          description: Token
+          type: string
+        expires_in:
+          description: 'Token Expires In'
+          type: integer
+        token_type:
+          description: 'Token Type'
+          type: string
+      type: object
+    SmsDetailResource:
+      title: SmsDetailResource
+      description: SmsDetailResource
+      properties:
+        number:
+          description: Number
+          type: string
+        message:
+          description: Message
+          type: string
+        status_code:
+          description: 'Status Code'
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+        status_text:
+          description: 'Status Text'
+          type: string
+          enum:
+            - Pending
+            - Success
+            - Failed
+        send_date:
+          description: 'Send Date Time'
+          type: string
+        response_send:
+          description: 'Response Send'
+          type: string
+      type: object
+    SmsResource:
+      title: SmsResource
+      description: SmsResource
+      required:
+        - id
+        - send_date
+        - status_text
+        - status_code
+        - created_at
+        - sms_details
+      properties:
+        id:
+          description: Id
+          type: integer
+        send_date:
+          description: 'Send Date'
+          type: string
+        status_text:
+          description: 'Status Text'
+          type: string
+          enum:
+            - Pending
+            - Completed
+            - Canceled
+        status_code:
+          description: 'Status Code'
+          type: integer
+        created_at:
+          description: 'Created At'
+          type: string
+        sms_details:
+          description: 'Sms Details'
+          type: array
+          items:
+            $ref: '#/components/schemas/SmsDetailResource'
+      type: object
+    UserResource:
+      title: UserResource
+      properties:
+        name:
+          description: 'User Name'
+          type: string
+        email:
+          description: 'User Email'
+          type: string
+        customer:
+          $ref: '#/components/schemas/CustomerResource'
+      type: object
+  responses:
+    500:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+  parameters:
+    name:
+      name: name
+      in: path
+      description: "User's name"
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      bearerFormat: JWT
+      scheme: bearer

@@ -1,0 +1,789 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Sms Api Documentation",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api/v1"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login User get token",
+                "operationId": "99d66635c4992aeaa6aa44ff653d0563",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email",
+                                        "type": "string",
+                                        "example": "sinan@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "User's password",
+                                        "type": "string",
+                                        "example": "1233"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register User",
+                "operationId": "08136088c4862c313b35d6518bab8d3a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "customer_id",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "customer_id": {
+                                        "description": "User's customer_id",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "name": {
+                                        "description": "User's name",
+                                        "type": "string",
+                                        "example": "Sinan"
+                                    },
+                                    "email": {
+                                        "description": "User's email",
+                                        "type": "string",
+                                        "example": "sinan@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "User's password",
+                                        "type": "string",
+                                        "example": "1233"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "User's password_confirmation",
+                                        "type": "string",
+                                        "example": "1233"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Register success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/user": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get User",
+                "operationId": "32d03117b496ae02c2543b61438d24ad",
+                "responses": {
+                    "201": {
+                        "description": "Get user success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResource"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnAuthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/sms": {
+            "get": {
+                "tags": [
+                    "Sms"
+                ],
+                "summary": "Sms List",
+                "description": "Sms List",
+                "operationId": "22889aa1300dc7911c4659c87d3fbe8b",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page Id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id[eq]",
+                        "in": "query",
+                        "description": "Filter by id, diğer kullanabileceğini operatorler\n     *      'eq'=>'eşit (=)', 'lt=>küçük(<)', 'lte => küçük ve eşit (<=)', 'gt => büyük (>)', 'gte=> büyük ve eşit (>=)', 'btw => between'",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sendDate[btw]",
+                        "in": "query",
+                        "description": "Filter by send date, btw yerine eq yazarak verdiğiniz tarihe göre de filtreleme yapabilirsiniz. ",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "01-01-2024x30-12-2024"
+                    },
+                    {
+                        "name": "statusCode[eq]",
+                        "in": "query",
+                        "description": "Filter by status code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SmsResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnAuthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Sms"
+                ],
+                "summary": "Send Sms",
+                "description": "Send Sms",
+                "operationId": "617d5b316d47a4cc1ba785e32142c3b5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "send_date",
+                                    "numbers"
+                                ],
+                                "properties": {
+                                    "send_date": {
+                                        "description": "Sms send date",
+                                        "type": "string",
+                                        "example": "11.01.2024 22:50"
+                                    },
+                                    "numbers": {
+                                        "description": "Sms numbers",
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "number",
+                                                "message"
+                                            ],
+                                            "properties": {
+                                                "number": {
+                                                    "description": "Sms number",
+                                                    "type": "string",
+                                                    "example": "905555555555"
+                                                },
+                                                "message": {
+                                                    "description": "Sms message",
+                                                    "type": "string",
+                                                    "example": "Sms message"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sms Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SmsResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/sms/{id}": {
+            "get": {
+                "tags": [
+                    "Sms"
+                ],
+                "summary": "Sms Show",
+                "description": "Sms Show",
+                "operationId": "6980db381e24db110b739c26179a9b7f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sms Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SmsResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnAuthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Sms"
+                ],
+                "summary": "Sms Delete",
+                "description": "Sms Delete",
+                "operationId": "1b9eeeae0d8f38bfbb9b3400ac288334",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sms Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnAuthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/sms/{id}/report": {
+            "get": {
+                "tags": [
+                    "Sms"
+                ],
+                "summary": "Sms Report",
+                "description": "Sms Report",
+                "operationId": "8de09fc1760b921bc12e9d87ec5e2d0c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sms Id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SmsReportResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnAuthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "UnAuthorized": {
+                "title": "UnAuthorized",
+                "properties": {
+                    "message": {
+                        "description": "UnAuthorized Message",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ApiResponse": {
+                "title": "ApiResponse",
+                "properties": {
+                    "status": {
+                        "description": "Status",
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "description": "Message",
+                        "type": "string"
+                    },
+                    "data": {
+                        "description": "Data",
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "CustomerResource": {
+                "title": "CustomerResource",
+                "properties": {
+                    "id": {
+                        "description": "Customer Id",
+                        "type": "integer"
+                    },
+                    "identity": {
+                        "description": "Customer Identity",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Customer Name",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Customer Email",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "Customer Phone",
+                        "type": "string"
+                    },
+                    "tax_no": {
+                        "description": "Customer Tax No",
+                        "type": "string"
+                    },
+                    "tax_office": {
+                        "description": "Customer Tax Office",
+                        "type": "string"
+                    },
+                    "address": {
+                        "description": "Customer Address",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginResource": {
+                "title": "LoginResource",
+                "properties": {
+                    "token": {
+                        "description": "Token",
+                        "type": "string"
+                    },
+                    "expires_in": {
+                        "description": "Token Expires In",
+                        "type": "integer"
+                    },
+                    "token_type": {
+                        "description": "Token Type",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SmsDetailResource": {
+                "title": "SmsDetailResource",
+                "description": "SmsDetailResource",
+                "properties": {
+                    "number": {
+                        "description": "Number",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "Message",
+                        "type": "string"
+                    },
+                    "status_code": {
+                        "description": "Status Code",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ]
+                    },
+                    "status_text": {
+                        "description": "Status Text",
+                        "type": "string",
+                        "enum": [
+                            "Pending",
+                            "Success",
+                            "Failed"
+                        ]
+                    },
+                    "send_date": {
+                        "description": "Send Date Time",
+                        "type": "string"
+                    },
+                    "response_send": {
+                        "description": "Response Send",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SmsReportResource": {
+                "title": "SmsReportResource",
+                "description": "SmsReportResource",
+                "properties": {
+                    "id": {
+                        "description": "Id",
+                        "type": "integer"
+                    },
+                    "send_date": {
+                        "description": "Send Date Time",
+                        "type": "string"
+                    },
+                    "status_code": {
+                        "description": "Status Code",
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1,
+                            2
+                        ]
+                    },
+                    "status_text": {
+                        "description": "Status Text",
+                        "type": "string",
+                        "enum": [
+                            "Pending",
+                            "Success",
+                            "Failed"
+                        ]
+                    },
+                    "pending_count": {
+                        "description": "Pending Count",
+                        "type": "integer"
+                    },
+                    "success_count": {
+                        "description": "Success Count",
+                        "type": "integer"
+                    },
+                    "fail_count": {
+                        "description": "Fail Count",
+                        "type": "integer"
+                    },
+                    "total_count": {
+                        "description": "Total Count",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Created At",
+                        "type": "string"
+                    },
+                    "sms_details": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SmsDetailResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SmsResource": {
+                "title": "SmsResource",
+                "description": "SmsResource",
+                "required": [
+                    "id",
+                    "send_date",
+                    "status_text",
+                    "status_code",
+                    "created_at",
+                    "sms_details"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Id",
+                        "type": "integer"
+                    },
+                    "send_date": {
+                        "description": "Send Date",
+                        "type": "string"
+                    },
+                    "status_text": {
+                        "description": "Status Text",
+                        "type": "string",
+                        "enum": [
+                            "Pending",
+                            "Completed",
+                            "Canceled"
+                        ]
+                    },
+                    "status_code": {
+                        "description": "Status Code",
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "description": "Created At",
+                        "type": "string"
+                    },
+                    "sms_details": {
+                        "description": "Sms Details",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SmsDetailResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "title": "UserResource",
+                "properties": {
+                    "name": {
+                        "description": "User Name",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "User Email",
+                        "type": "string"
+                    },
+                    "customer": {
+                        "$ref": "#/components/schemas/CustomerResource"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "500": {
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}
